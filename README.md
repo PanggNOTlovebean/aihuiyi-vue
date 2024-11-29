@@ -1,4 +1,7 @@
 ## 爱回译项目
+### 启动
+pnpm i
+pnpm run dev
 todo
 1. 请求 done
 2. router 
@@ -8,7 +11,7 @@ todo
    1. vant： https://vant-ui.github.io/vant/#/zh-CN/quickstart
 5. 页面开发
    1. main
-   3. huiyi
-   4. ask
-
+   2. huiyi
+   3. ask
 6. 部署
+7. pc端适配

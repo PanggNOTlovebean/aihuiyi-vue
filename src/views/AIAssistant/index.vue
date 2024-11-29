@@ -1,6 +1,6 @@
 <template>
   <div>
-    <topBack title="learn"/>
+    <topBack title="ai交互"/>
     <div class="talk-area" ref="talkAreaRef">
       <div v-for="item in talkLeftHistory" :key="item" class="talk-item talk-left">
         <span class="avater">R</span>
@@ -19,17 +19,13 @@
     <div class="bottom-box">
       <div class="input">
         <van-cell-group inset>
-          <van-field v-model="inputValue" label="答案" placeholder="请输入答案" />
+          <van-field v-model="inputValue" placeholder="请输入" />
         </van-cell-group>
       </div>
       <div class="bottoms">
-        <van-button :disabled="!inputValue" size="small" block round type="primary"  @click="submit">
+        <van-button :disabled="!inputValue" size="normal" block  type="primary"  @click="submit">
           提交
-        </van-button>
-        <van-button size="small" block type="primary" round @click="goAI">
-          ai交互
-        </van-button>
-        
+        </van-button>        
       </div>
     </div>
   </div>
@@ -37,9 +33,8 @@
 
 <script lang='ts' setup>
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 import topBack from '@/components/topBack.vue'
-import { nextTick } from 'vue';
 const router = useRouter();
 const talkLeftHistory = ref([1,2,3,4,4,4,5,6,7,8])
 const talkAreaRef = ref()
@@ -49,8 +44,8 @@ const inputValue = ref('')
 const onClickLeft = () => {
   history.back();
 }
-const goAI = () => {
-  router.push({name: 'aiAssistant'})
+const goLearn = () => {
+  router.push({name: 'learn'})
 };
 const submit = () => {
   talkRightHistory.value.push(inputValue.value)
@@ -118,12 +113,7 @@ const scrollToBottom = () => {
 
   }
   .bottoms {
-    display: flex;
-    justify-content: space-around;
     padding: 10px;
-    button {
-      width: 40vw;
-    }
   }
 }
 </style>
