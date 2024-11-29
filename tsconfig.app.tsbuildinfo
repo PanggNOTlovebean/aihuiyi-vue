@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/app.vue","./src/components/helloworld.vue","./src/views/bigdata/areafour.vue","./src/views/bigdata/areaone.vue","./src/views/bigdata/areathree.vue","./src/views/bigdata/areatwo.vue","./src/views/bigdata/index.vue","./src/views/bigdata/map.vue"],"errors":true,"version":"5.6.3"}
