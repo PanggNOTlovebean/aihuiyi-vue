@@ -7,26 +7,19 @@
     </van-nav-bar>
     <div class="talk-area" ref="talkAreaRef">
       <div v-for="(item, index) in talkList" :key="index">
-        <div
-        v-if="item.type === 'ai'"
-        class="talk-item talk-left"
-      >
-        <span class="avater">AI</span>
-        <div class="chat-bubble">
-          {{ item.content }}
+        <div v-if="item.type === 'ai'" class="talk-item talk-left">
+          <span class="avater">AI</span>
+          <div class="chat-bubble">
+            {{ item.content }}
+          </div>
+        </div>
+        <div v-if="item.type === 'mine'" class="talk-item talk-right">
+          <span class="avater">me</span>
+          <div class="chat-bubble">
+            {{ item.content }}
+          </div>
         </div>
       </div>
-      <div
-        v-if="item.type === 'mine'"
-        class="talk-item talk-right"
-      >
-        <span class="avater">me</span>
-        <div class="chat-bubble">
-          {{ item.content }}
-        </div>
-      </div>
-      </div>
-      
     </div>
     <div class="bottom-box">
       <div class="input">

@@ -1,11 +1,11 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import {Button, NavBar, Field, CellGroup, Cell, Icon, Tab,Tag, Tabs, Popup} from 'vant'
+import { Button, NavBar, Field, CellGroup, Cell, Icon, Tab, Tag, Tabs, Popup } from 'vant'
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'vant/lib/index.css';
-import {router} from './router/index.ts'
+import { router } from './router/index.ts'
 
 const app = createApp(App);
 

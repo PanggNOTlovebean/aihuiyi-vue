@@ -42,7 +42,14 @@
         </van-cell-group>
       </div>
       <div class="bottoms">
-        <van-button v-if="step===3" size="small" block type="primary" round @click="nextQuestion">
+        <van-button
+          v-if="step === 3"
+          size="small"
+          block
+          type="primary"
+          round
+          @click="nextQuestion"
+        >
           下一题
         </van-button>
         <van-button
@@ -121,12 +128,13 @@ const nextQuestion = () => {
       step.value = 1;
       question.value = {};
       getQuestion();
-    }).finally((res) => {
+    })
+    .finally((res) => {
       step.value = 1;
       question.value = {};
       getQuestion();
     });
-}
+};
 const goAI = () => {
   show.value = true;
 };
