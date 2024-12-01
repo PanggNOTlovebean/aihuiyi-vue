@@ -33,27 +33,27 @@ const defaultConfig: AxiosRequestConfig = {
   // }
 };
 
-const postReloadMessage = () => {
-  const postData = {
-    from: 'auth',
-    event: 'reload'
-  };
-  ElMessageBox.alert('登录超时, 请刷新页面', '登录超时', {
-    confirmButtonText: '确定',
-    callback: action => {
-      if (action !== 'confirm') {
-        return;
-      }
-      // location.reload();
-      window.parent.postMessage(JSON.stringify(postData), '*');
-    }
-  });
-};
+// const postReloadMessage = () => {
+//   const postData = {
+//     from: 'auth',
+//     event: 'reload'
+//   };
+//   ElMessageBox.alert('登录超时, 请刷新页面', '登录超时', {
+//     confirmButtonText: '确定',
+//     callback: action => {
+//       if (action !== 'confirm') {
+//         return;
+//       }
+//       // location.reload();
+//       window.parent.postMessage(JSON.stringify(postData), '*');
+//     }
+//   });
+// };
 
 class PureHttp {
   constructor(config = {}) {
     this.axiosInstance = Axios.create({ ...defaultConfig, ...config });
-    this.httpInterceptorsResponse()
+    // this.httpInterceptorsResponse()
   }
 
   /** token过期后，暂存待执行的请求 */
@@ -81,31 +81,31 @@ class PureHttp {
   /** 请求拦截 */
 
   /** 响应拦截 */
-  private httpInterceptorsResponse(): void {
-    const instance = this.axiosInstance;
-    instance.interceptors.response.use(
-      (response: PureHttpResponse) => {
-        const $config = response.config;
-        // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
-        if (typeof $config.beforeResponseCallback === 'function') {
-          $config.beforeResponseCallback(response);
-          return response.data;
-        }
-        if (this.initConfig.beforeResponseCallback) {
-          this.initConfig.beforeResponseCallback(response);
-          return response.data;
-        }
-        return response.data;
-      },
-      (error: PureHttpError) => {
-        const $error = error;
-        $error.isCancelRequest = Axios.isCancel($error);
-        // 关闭进度条动画
-        // 所有的响应异常 区分来源为取消请求/非取消请求
-        return Promise.reject($error);
-      }
-    );
-  }
+  // private httpInterceptorsResponse(): void {
+  //   const instance = this.axiosInstance;
+  //   instance.interceptors.response.use(
+  //     (response: PureHttpResponse) => {
+  //       const $config = response.config;
+  //       // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
+  //       if (typeof $config.beforeResponseCallback === 'function') {
+  //         $config.beforeResponseCallback(response);
+  //         return response.data;
+  //       }
+  //       if (this.initConfig.beforeResponseCallback) {
+  //         this.initConfig.beforeResponseCallback(response);
+  //         return response.data;
+  //       }
+  //       return response.data;
+  //     },
+  //     (error: PureHttpError) => {
+  //       const $error = error;
+  //       $error.isCancelRequest = Axios.isCancel($error);
+  //       // 关闭进度条动画
+  //       // 所有的响应异常 区分来源为取消请求/非取消请求
+  //       return Promise.reject($error);
+  //     }
+  //   );
+  // }
   /** 通用请求工具函数 */
   public request<T>(
     method: RequestMethods,

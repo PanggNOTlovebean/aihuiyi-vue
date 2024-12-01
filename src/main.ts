@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import {Button, NavBar, Field, CellGroup, Cell, Icon, Tab, Tabs} from 'vant'
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 import 'vant/lib/index.css';
 import {router} from './router/index.ts'
 
@@ -17,5 +19,7 @@ app.use(Cell);
 app.use(Icon);
 app.use(Tab);
 app.use(Tabs);
+app.use(ElementPlus);
+
 
 app.mount('#app');

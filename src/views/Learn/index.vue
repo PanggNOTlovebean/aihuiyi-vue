@@ -37,15 +37,31 @@
 
 <script lang='ts' setup>
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import axios from 'axios';
+
+import { ref,nextTick, onMounted } from 'vue';
+import {plmhttp, http} from '@/http/index.ts'
 import topBack from '@/components/topBack.vue'
-import { nextTick } from 'vue';
 const router = useRouter();
 const talkLeftHistory = ref([1,2,3,4,4,4,5,6,7,8])
 const talkAreaRef = ref()
 const talkRightHistory = ref<string|number[]>([1,2,3,4,4,4,5,6,7,8])
 
 const inputValue = ref('')
+
+onMounted(() => {
+  testRequest()
+})
+const testRequest = () => {
+  http.post('/startSession', {
+  "user_id": "wx_o1234567",
+  "ssid": ""
+});
+axios.post('/startSession', {
+  "user_id": "wx_o1234567",
+  "ssid": ""
+})
+};
 const onClickLeft = () => {
   history.back();
 }

@@ -22,6 +22,11 @@ export default defineConfig({
         changeOrigin: true
         // rewrite: (path) => path.replace(/^\/wuyou/, '')
       },
+      '/startSession': {
+        target: 'http://47.95.36.122:8765', //实际请求地址
+        changeOrigin: true
+        // rewrite: (path) => path.replace(/^\/wuyou/, '')
+      },
     },
   },
 })
