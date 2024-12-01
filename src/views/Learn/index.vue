@@ -139,12 +139,13 @@ const goAI = () => {
   show.value = true;
 };
 const submit = () => {
+  const answer = inputValue.value;
+  inputValue.value = '';
   if (step.value === 1) {
-    question.value.chineseAnswer = inputValue.value;
-    inputValue.value = '';
+    question.value.chineseAnswer = answer;
     step.value = 2;
   } else {
-    question.value.englishAnswer = inputValue.value;
+    question.value.englishAnswer = answer;
     step.value = 3;
   }
   show.value = true;
@@ -159,7 +160,7 @@ const submit = () => {
           type: 'translation',
           from: 'en',
           to: 'zh-CN',
-          answer: inputValue.value,
+          answer: answer,
         },
       });
     scrollToBottom();

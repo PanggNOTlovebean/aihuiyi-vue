@@ -75,39 +75,31 @@ const outAnswer = (data) => {
 };
 
 const submit = (parmas) => {
+  const submitContent = inputValue.value;
+  inputValue.value = '';
+
   talkList.value.push({
-    content: inputValue.value,
+    content: submitContent,
     type: 'mine',
   });
-  // talkRightHistory.value.push(inputValue.value);
+  // talkRightHistory.value.push(submitContent);
   // todo loading
-  console.log(' props =========> ', props);
   axios
     .post('/userMessage', {
       user_id: props.question.user_id,
       type: 'text',
       ssid: props.question.ssid,
-      content: inputValue.value,
+      content: submitContent,
       ext: null,
       ...parmas,
     })
     .then((res) => {
       talkList.value.push({
-        content: 'inputValue.value',
+        content: res.data.data.content,
         type: 'ai',
       });
       scrollToBottom();
       scrollToBottom();
-      inputValue.value = '';
-    })
-    .finally((res) => {
-      talkList.value.push({
-        content: 'inputValue.value',
-        type: 'ai',
-      });
-      scrollToBottom();
-      scrollToBottom();
-      inputValue.value = '';
     });
 };
 
