@@ -1,7 +1,15 @@
 <template>
   <div class="learn-page">
-    <topBack title="learn" />
-    <div class="talk-area" ref="talkAreaRef">
+    <div class="nav-header">
+      <div class="left">
+        <van-icon name="arrow-left" @click="onClickLeft" />
+      </div>
+      <div class="title">回译训练</div>
+      <div class="right">
+        <van-icon name="ellipsis" />
+      </div>
+    </div>
+    <div class="talk-area" ref="talkAreaRef" v-if="activeTab === 'practice'">
       <div class="question-area">
         <p class="tran-tips">请将下面内容翻译为中文</p>
         <div class="wait-translate">
@@ -31,58 +39,40 @@
         </div>
       </div>
     </div>
+    <AIAssistant
+      v-if="activeTab === 'ai'"
+      ref="aiRef"
+      :question="question"
+    />
     <div class="bottom-box">
-      <div class="input">
-        <van-cell-group inset>
-          <van-field
-            v-model="inputValue"
-            label="答案"
-            placeholder="请输入答案"
-          />
-        </van-cell-group>
+      <div class="tab-group">
+        <div 
+          :class="['tab-item', activeTab === 'practice' ? 'active' : '']" 
+          @click="activeTab = 'practice'"
+        >
+          <span class="tab-icon">👨‍🎓</span>
+          训练模式
+        </div>
+        <div 
+          :class="['tab-item', activeTab === 'ai' ? 'active' : '']" 
+          @click="activeTab = 'ai'"
+        >
+          <span class="tab-icon">🤖</span>
+          AI指导模式
+        </div>
       </div>
-      <div class="bottoms">
-        <van-button
-          v-if="step === 3"
-          size="small"
-          block
-          type="primary"
-          round
-          @click="nextQuestion"
-        >
-          下一题
-        </van-button>
-        <van-button
-          v-else
-          :disabled="!inputValue"
-          size="small"
-          block
-          round
-          type="primary"
-          @click="submit"
-        >
-          提交
-        </van-button>
-        <van-button size="small" block type="primary" round @click="goAI">
-          ai交互
-        </van-button>
+      <div class="input-area">
+        <textarea
+          v-model="inputValue" 
+          class="message-input"
+          placeholder="请输入你的问题"
+          rows="3"
+        ></textarea>
+        <div class="send-btn">
+          <img src="@/assets/icon/send.svg" alt="send" />
+        </div>
       </div>
     </div>
-    <van-popup
-      v-model:show="show"
-      position="bottom"
-      :style="{ height: '100vh' }"
-    >
-      <AIAssistant
-        ref="aiRef"
-        :question="question"
-        @close="
-          () => {
-            show = false;
-          }
-        "
-      />
-    </van-popup>
   </div>
 </template>
 
@@ -98,9 +88,9 @@ const talkAreaRef = ref();
 const aiRef = ref();
 const question = ref({});
 const step = ref(1);
-const show = ref(false);
 
 const inputValue = ref('');
+const activeTab = ref('practice');
 
 onMounted(() => {
   getQuestion();
@@ -135,9 +125,6 @@ const nextQuestion = () => {
       getQuestion();
     });
 };
-const goAI = () => {
-  show.value = true;
-};
 const submit = () => {
   const answer = inputValue.value;
   inputValue.value = '';
@@ -148,7 +135,7 @@ const submit = () => {
     question.value.englishAnswer = answer;
     step.value = 3;
   }
-  show.value = true;
+  activeTab.value = 'ai';
   nextTick(() => {
     aiRef.value?.outAnswer &&
       aiRef.value.outAnswer({
@@ -172,15 +159,41 @@ const scrollToBottom = () => {
 </script>
 
 <style lang="less" scoped>
-.talk-area {
+.learn-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(11px);
-  height: calc(100vh - 120px - 46px);
+}
+
+.nav-header {
+  height: 3.4em;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.2em;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    
+    .van-icon {
+      font-size: 1.4em;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.talk-area {
+  flex: 1;
   overflow-y: auto;
-  // 这个4px要跟下面的left/right的4px保持一致
   padding: 0 4px;
-  // width: 100vw;
-  position: relative;
+  // 移除固定高度
+  // height: calc(100vh - 120px - 46px);
   .question-area {
     margin: 10px;
     padding: 10px;
@@ -226,15 +239,79 @@ const scrollToBottom = () => {
   }
 }
 .bottom-box {
-  margin-top: 4px;
-  height: 116px;
-  overflow: hidden;
-  .bottoms {
+  padding: 8px 16px 8px;
+  margin-bottom: 20px;
+  background: transparent;
+  
+  .tab-group {
     display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    button {
-      width: 40vw;
+    gap: 12px;
+    margin-bottom: 12px;
+    
+    .tab-item {
+      flex: 1;
+      padding: 8px 16px;
+      color: #666;
+      cursor: pointer;
+      border-radius: 16px;
+      background: #f5f7fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.3s;
+      
+      .tab-icon {
+        font-size: 20px;
+      }
+      
+      &.active {
+        color: #4080ff;
+        background: #fff;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .input-area {
+    position: relative;
+    background: #f5f7fa;
+    border-radius: 12px;
+    padding: 8px 16px;
+    
+    .message-input {
+      width: 100%;
+      min-height: 80px;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      resize: none;
+      padding-right: 40px;
+      
+      &::placeholder {
+        color: #999;
+      }
+    }
+    
+    .send-btn {
+      position: absolute;
+      right: 16px;
+      bottom: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      
+      img {
+        width: 24px;
+        height: 24px;
+      }
     }
   }
 }
