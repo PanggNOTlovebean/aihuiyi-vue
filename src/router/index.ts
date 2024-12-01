@@ -5,6 +5,7 @@ import AIAssistant from '../views/AIAssistant/index.vue';
 import Review from '../views/Review/index.vue';
 import Word from '../views/Word/index.vue';
 import Grammar from '../views/Grammar/index.vue';
+import NoPage from '../views/NoPage.vue'
 const routes = [
   { path: '/main', name: 'main', component: Main },
   { path: '/learn', name: 'learn', component: Learn },
@@ -24,7 +25,22 @@ const routes = [
     name: 'review-grammar',
     component: Grammar
   },
-  { path: '/', redirect: '/main' }
+  {
+    path: '/review/history',
+    name: 'review-history',
+    component: NoPage
+  },
+  { path: '/', redirect: '/main' },
+  {
+    path: '/coming-soon',
+    name: 'noPage',
+    component: NoPage
+  },
+  { 
+    path: '/user', 
+    name: 'user', 
+    component: NoPage
+  },
 ]
 
 

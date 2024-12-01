@@ -1,7 +1,7 @@
 <template>
-  <div class="blur-background">
+  <div class="background">
     <!-- 顶部用户头像区域 -->
-    <div class="user-avatar">
+    <div class="user-avatar" @click="goUser">
       <van-badge :content="6">
         <img src="@/assets/icon/avatar.svg" width="40" height="40" />
       </van-badge>
@@ -49,6 +49,9 @@ const goLearn = () => {
 const goReview = () => {
   router.push({name: 'review'})
 };
+const goUser = () => {
+  router.push({name: 'user'})
+};
 </script>
 
 <style lang='less' scoped>
@@ -61,7 +64,6 @@ const goReview = () => {
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   padding: 8px;
-  backdrop-filter: blur(8px);
   
   img {
     border-radius: 50%;
@@ -96,9 +98,8 @@ const goReview = () => {
 
 .action-button {
   flex: 1;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(8px);
-  padding: 20px 30px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 15px 30px;
   border-radius: 12px;
   display: flex;
   justify-content: flex-start;

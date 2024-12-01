@@ -4,33 +4,40 @@
       <div class="left">
         <van-icon name="arrow-left" @click="goBack" />
       </div>
+      <div class="title">请选择复习项目</div>
       <div class="right">
         <van-icon name="ellipsis" />
       </div>
     </div>
-    
     <div class="review-container">
-      <div class="review-sections">
-        <van-cell-group inset>
-          <van-cell 
-            title="单词强化" 
-            :is-link="false"
-            @click="goToSection('word')"
-            class="review-cell" 
-          />
-          <van-cell 
-            title="语法强化" 
-            :is-link="false"
-            @click="goToSection('grammar')"
-            class="review-cell" 
-          />
-          <van-cell 
-            title="回译记录" 
-            :is-link="false"
-            @click="goToSection('history')"
-            class="review-cell" 
-          />
-        </van-cell-group>
+      <div class="review-cards">
+        <div class="card pink" @click="goToSection('word')">
+          <div class="card-content">
+            <van-icon name="bookmark-o" class="card-icon"/>
+            <div class="text-content">
+              <p class="tip">单词强化</p>
+              <p class="second-text">Review vocabulary</p>
+            </div>
+          </div>
+        </div>
+        <div class="card blue" @click="goToSection('grammar')">
+          <div class="card-content">
+            <van-icon name="notes-o" class="card-icon"/>
+            <div class="text-content">
+              <p class="tip">语法强化</p>
+              <p class="second-text">Practice grammar</p>
+            </div>
+          </div>
+        </div>
+        <div class="card green" @click="goToSection('history')">
+          <div class="card-content">
+            <van-icon name="clock-o" class="card-icon"/>
+            <div class="text-content">
+              <p class="tip">回译记录</p>
+              <p class="second-text">Translation history</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -56,31 +63,77 @@ const goBack = () => {
   height: 100vh;
   padding: 16px;
   
-  .review-sections {
+  .review-cards {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 
-    :deep(.van-cell-group) {
-      background: transparent;
-      
-      &::after {
-        display: none;
+    .card {
+      height: 100px;
+      width: 100%;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+
+      &.pink {
+        background-color: #FF4B4B;
+        
+        .text-content {
+          .tip, .second-text {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          }
+        }
       }
-    }
 
-    :deep(.review-cell) {
-      padding: 16px;
-      margin-bottom: 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      background-color: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-      &::after {
-        display: none;
+      &.blue {
+        background-color: #4B7BFF;
+        
+        .text-content {
+          .tip, .second-text {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          }
+        }
       }
 
-      &:last-child {
-        margin-bottom: 20px;
+      &.green {
+        background-color: #dd9504;
+        
+        .text-content {
+          .tip, .second-text {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
+
+      .card-content {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        gap: 16px;
+
+        .card-icon {
+          font-size: 32px;
+        }
+
+        .text-content {
+          flex: 1;
+          text-align: left;
+
+          .tip {
+            font-size: 1.5em;
+            letter-spacing: 0.02em;
+            font-weight: 700;
+            margin: 0;
+          }
+
+          .second-text {
+            font-size: 1em;
+            opacity: 1;
+            margin: 0;
+          }
+        }
       }
     }
   }
@@ -113,5 +166,13 @@ const goBack = () => {
       font-size: 1.4em;
     }
   }
+}
+
+.page-title {
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 600;
+  margin: 1em 0;
+  color: #333;
 }
 </style>
