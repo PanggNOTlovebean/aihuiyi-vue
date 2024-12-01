@@ -5,6 +5,9 @@ body{
   color: #303133;
   background-color: #f7f8fa;
 }
+p {
+  margin: 10px 0;
+}
 .small-text {
   font-size: 12px;
 }
