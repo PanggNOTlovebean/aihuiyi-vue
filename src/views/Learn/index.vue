@@ -6,103 +6,120 @@
       </div>
       <div class="title">回译训练</div>
       <div class="right">
-        <van-icon name="ellipsis" />
+        <van-icon
+          name="wap-home-o"
+          @click="
+            () => {
+              router.push({ name: 'main' });
+            }
+          "
+        />
       </div>
     </div>
-    <div class="talk-area" ref="talkAreaRef" v-if="activeTab === 'practice'">
+    <div class="talk-area" ref="talkAreaRef" v-show="activeTab === 'practice'">
       <div class="question-area">
-        <p class="tran-tips">请将下面内容翻译为中文</p>
+        <div class="tran-tips">请将下面内容翻译为中文</div>
         <div class="wait-translate">
-          {{ question.english_content }}
+          <div v-if="step === 2" class="mask"></div>
+          <div :class="['text', step === 2 ? 'diagonal-block-text' : '']">
+            {{ question.english_content }}
+          </div>
         </div>
       </div>
-      <div v-if="question.chineseAnswer" class="talk-item talk-right">
-        <span class="avater">me</span>
+      <div v-if="question.chineseAnswer" class="answer-item">
         <div class="chat-bubble">
+          <div class="answer-area padding-b-0" v-show="answerTab === 'mine'">
+            {{ question.chineseAnswer }}
+          </div>
+          <div
+            class="answer-area padding-b-0"
+            v-show="answerTab === 'AIAnswer'"
+          >
+            {{ question.chinese_content }}
+          </div>
+          <van-tabs v-model:active="answerTab">
+            <van-tab title="我的答案" name="mine"> </van-tab>
+            <van-tab title="标准答案" name="AIAnswer"> </van-tab>
+          </van-tabs>
           <!-- todo 参考答案打个标签 -->
+          <!-- <van-tag type="primary">我的答案</van-tag>
+          <div>{{ question.chineseAnswer }}</div>
+          <div class="line"></div>
           <van-tag type="primary" plain>参考答案</van-tag>
           <div>
             {{ question.chinese_content }}
-          </div>
-          <div class="line"></div>
-          <van-tag type="primary">我的答案</van-tag>
-          <div>{{ question.chineseAnswer }}</div>
+          </div> -->
         </div>
       </div>
       <div v-if="question.chineseAnswer" class="question-area">
-        <p class="tran-tips">请将上述中文回译为英文</p>
+        <div class="tran-tips color-black">请将上述中文回译为英文</div>
       </div>
-      <div v-if="question.englishAnswer" class="talk-item talk-right">
-        <span class="avater">me</span>
+      <div v-if="question.englishAnswer" class="answer-item">
         <div class="chat-bubble">
-          <p>{{ question.englishAnswer }}</p>
+          <div class="answer-area">{{ question.englishAnswer }}</div>
         </div>
       </div>
+      <van-button
+        v-if="step === 3"
+        class="next-question-btn"
+        type="primary"
+        block
+        @click="nextQuestion"
+        >下一题</van-button
+      >
     </div>
-    <AIAssistant
-      v-if="activeTab === 'ai'"
-      ref="aiRef"
-      :question="question"
-    />
-    <div class="bottom-box">
-      <div class="tab-group">
-        <div 
-          :class="['tab-item', activeTab === 'practice' ? 'active' : '']" 
-          @click="activeTab = 'practice'"
-        >
-          <span class="tab-icon">👨‍🎓</span>
-          训练模式
-        </div>
-        <div 
-          :class="['tab-item', activeTab === 'ai' ? 'active' : '']" 
-          @click="activeTab = 'ai'"
-        >
-          <span class="tab-icon">🤖</span>
-          AI指导模式
-        </div>
-      </div>
-      <div class="input-area">
-        <textarea
-          v-model="inputValue" 
-          class="message-input"
-          placeholder="请输入你的问题"
-          rows="3"
-        ></textarea>
-        <div class="send-btn">
-          <img src="@/assets/icon/send.svg" alt="send" />
-        </div>
-      </div>
+    <div class="ai-area" v-show="activeTab === 'ai'">
+      <AIAssistant ref="aiRef" :question="question" />
     </div>
+    <BottomInput
+      :activeTab="activeTab"
+      @sendMsg="sendMsg"
+      :placeholder="activeTab === 'ai' ? '请输入你的疑问' : '请输入你的答案'"
+      @activeChange="activeChange"
+    ></BottomInput>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import AIAssistant from '@/views/AIAssistant/index.vue';
+import AIAssistant from './AIAssistant.vue';
+import BottomInput from './BottomInput.vue';
 
 import { ref, nextTick, onMounted } from 'vue';
-import topBack from '@/components/topBack.vue';
 const router = useRouter();
 const talkAreaRef = ref();
 const aiRef = ref();
-const question = ref({});
+type Tquestion = {
+  english_content?: string;
+  chinese_content?: string;
+  englishAnswer?: string;
+  chineseAnswer?: string;
+};
+const question = ref<Tquestion>({});
 const step = ref(1);
+const answerTab = ref('mine');
 
-const inputValue = ref('');
 const activeTab = ref('practice');
 
 onMounted(() => {
   getQuestion();
 });
+
+const activeChange = (tab: string) => {
+  activeTab.value = tab;
+};
 const getQuestion = () => {
   axios
-    .post('/startSession', {
+    .post('/api/startSession', {
       user_id: 'wx_o1234567',
       ssid: '',
     })
     .then((res) => {
-      question.value = { ...res.data.data, user_id: 'wx_o1234567' };
+      question.value = {
+        ...res.data.data,
+        user_id: 'wx_o1234567',
+      };
     });
 };
 const onClickLeft = () => {
@@ -110,7 +127,7 @@ const onClickLeft = () => {
 };
 const nextQuestion = () => {
   axios
-    .post('/endSession', {
+    .post('/api/endSession', {
       user_id: 'wx_o1234567',
       ssid: question.value.ssid,
     })
@@ -125,9 +142,17 @@ const nextQuestion = () => {
       getQuestion();
     });
 };
-const submit = () => {
-  const answer = inputValue.value;
-  inputValue.value = '';
+
+const sendMsg = (msg: string) => {
+  console.log(' msg =========> ', msg);
+  if (!msg) return;
+  if (activeTab.value === 'practice') {
+    submit(msg);
+  } else if (activeTab.value === 'ai') {
+    aiRef.value.outAnswer({ content: msg });
+  }
+};
+const submit = (answer: string) => {
   if (step.value === 1) {
     question.value.chineseAnswer = answer;
     step.value = 2;
@@ -140,7 +165,7 @@ const submit = () => {
     aiRef.value?.outAnswer &&
       aiRef.value.outAnswer({
         type: 'answer',
-        content: '我刚刚提交了一份我的翻译结果',
+        content: '我刚刚提交了一份我的翻译结果：',
         ext: {
           ssid: question.value.ssid,
           translate_question_id: question.value.question_id,
@@ -162,6 +187,7 @@ const scrollToBottom = () => {
 .learn-page {
   height: 100vh;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(11px);
@@ -174,12 +200,12 @@ const scrollToBottom = () => {
   padding: 0 1.2em;
   align-items: center;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  
+
   .left {
     display: flex;
     align-items: center;
     gap: 0.8em;
-    
+
     .van-icon {
       font-size: 1.4em;
       display: flex;
@@ -187,7 +213,8 @@ const scrollToBottom = () => {
     }
   }
 }
-
+.ai-area {
+}
 .talk-area {
   flex: 1;
   overflow-y: auto;
@@ -200,119 +227,104 @@ const scrollToBottom = () => {
     background-color: rgba(248, 248, 248, 0.5);
     border-radius: 8px;
     text-align: left;
-  }
-  .talk-item {
-    margin: 10px 0;
-    position: relative;
-    display: flex;
-  }
-  .talk-right {
-    right: 4px;
-    text-align: right;
-    flex-direction: row-reverse;
-    .chat-bubble {
-      background: #fff;
-      border-radius: 4px;
-      .line {
-        height: 1px;
-        margin: 8px 0;
-        background: #d4d7de;
+    .tran-tips {
+      font-weight: bold;
+      font-size: 18px;
+      margin: 4px 0;
+      background: linear-gradient(to right, #4a90e2, #9013fe);
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 2px;
         width: 100%;
+        height: 5px;
+        background-color: rgba(74, 144, 226, 0.6);
+        z-index: -1;
+      }
+    }
+    .color-black {
+      background: #606266;
+      background-clip: text;
+    }
+    .wait-translate {
+      position: relative;
+      .mask {
+        position: absolute;
+        border-radius: 6px;
+        width: 100%;
+        height: 100%;
+        background: rgba(115.2, 117.6, 122.4, 0.1);
+        backdrop-filter: blur(10px);
+        z-index: 1;
+      }
+      .text {
+        z-index: 0;
       }
     }
   }
-
-  .avater {
-    text-align: center;
-    display: inline-block;
-    line-height: 32px;
-    width: 32px;
-    height: 32px;
-    margin: 0 10px;
-    border-radius: 50%;
-    background: #70d33d;
-  }
-  .chat-bubble {
-    background: #fff;
+  .answer-item {
+    margin: 10px;
     padding: 10px;
-    max-width: 60vw;
+    text-align: left;
+    margin: 10px 0;
+    .chat-bubble {
+      background-color: rgba(248, 248, 248, 0.8);
+      border-radius: 4px;
+      .answer-area {
+        padding: 12px;
+      }
+      .padding-b-0 {
+        padding-bottom: 0;
+      }
+    }
   }
 }
-.bottom-box {
-  padding: 8px 16px 8px;
-  margin-bottom: 20px;
-  background: transparent;
-  
-  .tab-group {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 12px;
-    
-    .tab-item {
-      flex: 1;
-      padding: 8px 16px;
-      color: #666;
-      cursor: pointer;
-      border-radius: 16px;
-      background: #f5f7fa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.3s;
-      
-      .tab-icon {
-        font-size: 20px;
-      }
-      
-      &.active {
-        color: #4080ff;
-        background: #fff;
-        font-weight: 500;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-    }
+.diagonal-block-text {
+  background: linear-gradient(
+    145deg,
+    black 25%,
+    transparent 25%,
+    transparent 50%,
+    black 50%,
+    black 75%,
+    transparent 75%
+  );
+  background-size: 10px 10px;
+  background-clip: text;
+  color: transparent;
+}
+.next-question-btn {
+  margin-top: 10px;
+  width: 60vw;
+  margin: 0 auto;
+}
+
+:deep(.van-tabs) {
+  flex-shrink: 0;
+
+  .van-tabs__wrap {
+    background-color: transparent;
+    padding-top: 0.5em;
   }
 
-  .input-area {
-    position: relative;
-    background: #f5f7fa;
-    border-radius: 12px;
-    padding: 8px 16px;
-    
-    .message-input {
-      width: 100%;
-      min-height: 80px;
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 14px;
-      resize: none;
-      padding-right: 40px;
-      
-      &::placeholder {
-        color: #999;
-      }
-    }
-    
-    .send-btn {
-      position: absolute;
-      right: 16px;
-      bottom: 12px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      
-      img {
-        width: 24px;
-        height: 24px;
-      }
-    }
+  .van-tabs__nav {
+    background-color: transparent;
+  }
+}
+
+:deep(.van-tab) {
+  color: #666;
+  font-weight: 9000;
+  font-size: 15px;
+
+  &--active {
+    color: #1989fa;
+    font-weight: 700;
   }
 }
 </style>

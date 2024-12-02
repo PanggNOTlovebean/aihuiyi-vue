@@ -1,7 +1,6 @@
-import { createWebHashHistory, createRouter } from 'vue-router'; 
+import { createWebHashHistory, createRouter } from 'vue-router';
 import Main from '../views/main/index.vue';
 import Learn from '../views/Learn/index.vue';
-import AIAssistant from '../views/AIAssistant/index.vue';
 import Review from '../views/Review/index.vue';
 import Word from '../views/Word/index.vue';
 import Grammar from '../views/Grammar/index.vue';
@@ -9,10 +8,9 @@ import NoPage from '../views/NoPage.vue'
 const routes = [
   { path: '/main', name: 'main', component: Main },
   { path: '/learn', name: 'learn', component: Learn },
-  { path: '/aiAssistant', name: 'aiAssistant', component: AIAssistant },
-  { 
-    path: '/review', 
-    name: 'review', 
+  {
+    path: '/review',
+    name: 'review',
     component: Review
   },
   {
@@ -36,15 +34,15 @@ const routes = [
     name: 'noPage',
     component: NoPage
   },
-  { 
-    path: '/user', 
-    name: 'user', 
+  {
+    path: '/user',
+    name: 'user',
     component: NoPage
   },
 ]
 
 
 export const router = createRouter({
-  routes : routes,
+  routes: routes,
   history: createWebHashHistory(),
 })
