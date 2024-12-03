@@ -78,6 +78,7 @@ defineExpose({
 
 <style lang="less" scoped>
 .talk-area {
+  word-break: break-word;
   height: calc(100vh - 176px - 3.4em);
   overflow-y: auto;
   border-radius: 8px;
@@ -89,10 +90,10 @@ defineExpose({
     margin: 10px 0;
     position: relative;
     display: flex;
+    text-align: left;
   }
   .talk-left {
     left: 4px;
-    text-align: left;
     .chat-bubble {
       border-radius: 0 8px 8px;
       background: #f5f4f7;
@@ -100,7 +101,6 @@ defineExpose({
   }
   .talk-right {
     right: 4px;
-    text-align: right;
     flex-direction: row-reverse;
     .chat-bubble {
       border-radius: 8px 0 8px 8px;

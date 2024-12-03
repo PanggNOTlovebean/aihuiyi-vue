@@ -14,4 +14,5 @@ todo
    2. huiyi
    3. ask
 6. 部署
+   1. 分环境 vite build --mode staging
 7. pc端适配
