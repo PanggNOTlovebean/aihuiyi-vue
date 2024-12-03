@@ -111,7 +111,7 @@ const activeChange = (tab: string) => {
 };
 const getQuestion = () => {
   axios
-    .post('/api/startSession', {
+    .post('/startSession', {
       user_id: 'wx_o1234567',
       ssid: '',
     })
