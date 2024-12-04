@@ -170,9 +170,12 @@ const goBack = () => {
 
 .page-title {
   text-align: center;
-  font-size: 1.4em;
-  font-weight: 600;
-  margin: 1em 0;
-  color: #333;
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0.8em 0;
+  color: #555;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5em;
 }
 </style>

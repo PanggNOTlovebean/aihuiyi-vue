@@ -79,9 +79,9 @@ const goUser = () => {
 
 .title {
   color: #333;
-  font-size: 36px;
+  font-size: 20px;
   margin-bottom: 40px;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .button-group {

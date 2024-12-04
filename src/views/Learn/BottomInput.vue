@@ -13,7 +13,7 @@
         @click="activeChange('ai')"
       >
         <span class="tab-icon">🤖</span>
-        AI指导模式
+        AI指导
       </div>
     </div>
     <div class="input-area">
