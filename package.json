@@ -13,6 +13,8 @@
     "dayjs": "^1.11.13",
     "echarts": "^5.5.1",
     "element-plus": "^2.8.8",
+    "markdown": "^0.5.0",
+    "markdown-it": "^14.1.0",
     "vant": "^4.9.9",
     "vue": "^3.5.12",
     "vue-router": "^4.5.0"

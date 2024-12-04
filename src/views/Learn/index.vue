@@ -64,8 +64,7 @@
         </div>
         <div class="review-area">
           <div class="tran-tips color-black">回译解析</div>
-          <div>
-            xxxx
+          <div v-html="question.jiexi">
           </div>
         </div>
         <van-button
@@ -94,6 +93,8 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import AIAssistant from './AIAssistant.vue';
 import BottomInput from './BottomInput.vue';
+import markdownit from 'markdown-it';
+const md = markdownit()
 
 import { ref, nextTick, onMounted } from 'vue';
 const router = useRouter();
@@ -108,6 +109,7 @@ type Tquestion = {
 const question = ref<Tquestion>({});
 const step = ref(1);
 const answerTab = ref('mine');
+const aiLoading = ref(false);
 
 const activeTab = ref('practice');
 
@@ -134,6 +136,35 @@ const getQuestion = () => {
 const onClickLeft = () => {
   history.back();
 };
+
+const getjiexiResult = () => {
+  aiLoading.value = true;
+  question.value.jiexi = 'AI正在解析中...';
+  axios
+    .post('/api/userMessage', {
+      user_id: question.value.user_id,
+      type: 'answer',
+      ssid: question.value.ssid,
+      "content": "我刚刚提交了一份我的翻译结果",
+      ext: {
+          ssid: question.value.ssid,
+          question_id: question.value.question_id,
+          type: 'translation',
+          chinese_answer: question.value.chineseAnswer,
+          english_answer: question.value.englishAnswer,
+        },
+    })
+    .then((res) => {
+      question.value.jiexi = md.render(res.data.data.content) 
+    })
+    .catch(() => {
+      question.value.jiexi = 'AI出错了';
+    })
+    .finally(() => {
+      aiLoading.value = false;
+    });
+};
+
 const nextQuestion = () => {
   axios
     .post('/api/endSession', {
@@ -167,6 +198,7 @@ const submit = (answer: string) => {
     step.value = 2;
   } else {
     question.value.englishAnswer = answer;
+    getjiexiResult()
     step.value = 3;
   }
   // activeTab.value = 'ai';
