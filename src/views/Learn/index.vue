@@ -246,6 +246,7 @@ const scrollToBottom = () => {
 
 .color-black {
   font-size: 16px;
+  font-weight: normal;
   background: #303133;
   background-clip: text;
 }
@@ -310,7 +311,7 @@ const scrollToBottom = () => {
 }
 .next-question-btn {
   margin: 10px;
-  width: calc(100vw - 20px);
+  width: calc(100vw - 40px);
   margin: 0 auto;
 }
 
@@ -338,7 +339,7 @@ const scrollToBottom = () => {
   }
 }
 .review-area {
-  margin: 10px;
+  margin: 20px 20px;
   padding: 10px;
   text-align: left;
   background-color: rgba(248, 248, 248, 0.8);

@@ -86,7 +86,7 @@ defineExpose({
 <style lang="less" scoped>
 .talk-area {
   word-break: break-word;
-  height: calc(100vh - 176px - 3.4em);
+  height: calc(100vh - 186px - 3.4em);
   overflow-y: auto;
   border-radius: 8px;
   // 这个4px要跟下面的left/right的4px保持一致
