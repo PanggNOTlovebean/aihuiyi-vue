@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <!-- 顶部用户头像区域 -->
-    <div class="user-avatar" @click="goUser">
+    <!-- div class="user-avatar" @click="goUser">
       <van-badge :content="6">
         <img src="@/assets/icon/avatar.svg" width="40" height="40" />
       </van-badge>
@@ -9,7 +9,10 @@
 
     <!-- 中间内容区域 -->
     <div class="content">
-      <h1 class="title">爱回译 🎉</h1>
+      <div class="quote-wrapper">
+        <div class="quote-text">We will come ashore</div>
+        <div class="quote-text">in the sunshine</div>
+      </div>
     </div>
 
     <!-- 按钮区域 -->
@@ -72,16 +75,34 @@ const goUser = () => {
 
 .content {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding-top: 30vh;
+  min-height: 350px;
+  padding: 20px;
 }
 
-.title {
-  color: #333;
-  font-size: 20px;
-  margin-bottom: 40px;
-  font-weight: 800;
+.quote-wrapper {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.quote-text {
+  font-family: "Kunstler Script", "Snell Roundhand", "Dancing Script", cursive;
+  font-size: 32px;
+  line-height: 1.8;
+  color: #34495E;
+  letter-spacing: 0.05em;
+  
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6);
+  
+  &:first-child {
+    margin-bottom: 16px;
+  }
+  
+  &:last-child {
+    font-size: 28px;
+    opacity: 0.9;
+  }
 }
 
 .button-group {
