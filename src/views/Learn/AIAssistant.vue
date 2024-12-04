@@ -58,7 +58,14 @@ const submit = (parmas) => {
       ...parmas,
     })
     .then((res) => {
-      talkList.value[AIDoingIndex].content = res.data.data.content || '-';
+      if (res.data.data?.content?.overallComment) {
+        talkList.value[AIDoingIndex].content = res.data.data?.content?.overallComment;
+      } else {
+        talkList.value[AIDoingIndex].content = res.data.data.content || '-';
+      }
+    })
+    .catch(() => {
+      talkList.value[AIDoingIndex].content = 'AI出错了，请重新输入';
     })
     .finally(() => {
       aiLoading.value = false;

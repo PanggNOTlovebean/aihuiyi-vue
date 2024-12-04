@@ -17,16 +17,19 @@
       </div>
     </div>
     <div class="talk-area" ref="talkAreaRef" v-show="activeTab === 'practice'">
-      <div class="question-area">
-        <div class="tran-tips">请将下面内容翻译为中文</div>
+      <div v-if="step !== 3" class="question-area">
+        <div class="tran-tips">{{step===1 ? '请将下面内容翻译为中文' : '请将下面内容回译为英文'}}</div>
         <div class="wait-translate">
-          <div v-if="step === 2" class="mask"></div>
-          <div :class="['text', step === 2 ? 'diagonal-block-text' : '']">
+          <!-- <div :class="['text', step === 2 ? 'diagonal-block-text' : '']">
             {{ question.english_content }}
+          </div> -->
+          <div class="text">
+            {{ step===1 ? question.english_content :  question.chineseAnswer}}
           </div>
         </div>
       </div>
-      <div v-if="question.chineseAnswer" class="answer-item">
+
+      <!-- <div v-if="question.chineseAnswer" class="answer-item">
         <div class="chat-bubble">
           <div class="answer-area padding-b-0" v-show="answerTab === 'mine'">
             {{ question.chineseAnswer }}
@@ -41,32 +44,38 @@
             <van-tab title="我的答案" name="mine"> </van-tab>
             <van-tab title="标准答案" name="AIAnswer"> </van-tab>
           </van-tabs>
-          <!-- todo 参考答案打个标签 -->
-          <!-- <van-tag type="primary">我的答案</van-tag>
-          <div>{{ question.chineseAnswer }}</div>
-          <div class="line"></div>
-          <van-tag type="primary" plain>参考答案</van-tag>
-          <div>
-            {{ question.chinese_content }}
-          </div> -->
         </div>
-      </div>
-      <div v-if="question.chineseAnswer" class="question-area">
+      </div> -->
+      <!-- <div v-if="question.chineseAnswer" class="question-area">
         <div class="tran-tips color-black">请将上述中文回译为英文</div>
-      </div>
-      <div v-if="question.englishAnswer" class="answer-item">
-        <div class="chat-bubble">
-          <div class="answer-area">{{ question.englishAnswer }}</div>
+      </div> -->
+      <div v-if="step === 3">
+        <div class="review-area">
+          <div class="tran-tips color-black">英文对比</div>
+          <div class="line-text">{{ question.english_content || '-' }}</div>
+          <div class="line"></div>
+          <div class="line-text">{{ question.englishAnswer || '-' }}</div>
         </div>
+        <div class="review-area">
+          <div class="tran-tips color-black">中文对比</div>
+          <div class="line-text">{{ question.chinese_content || '-' }}</div>
+          <div class="line"></div>
+          <div class="line-text">{{ question.chineseAnswer || '-' }}</div>
+        </div>
+        <div class="review-area">
+          <div class="tran-tips color-black">回译解析</div>
+          <div>
+            xxxx
+          </div>
+        </div>
+        <van-button
+          class="next-question-btn"
+          type="primary"
+          block
+          @click="nextQuestion"
+          >下一题</van-button
+        >
       </div>
-      <van-button
-        v-if="step === 3"
-        class="next-question-btn"
-        type="primary"
-        block
-        @click="nextQuestion"
-        >下一题</van-button
-      >
     </div>
     <div class="ai-area" v-show="activeTab === 'ai'">
       <AIAssistant ref="aiRef" :question="question" />
@@ -160,23 +169,23 @@ const submit = (answer: string) => {
     question.value.englishAnswer = answer;
     step.value = 3;
   }
-  activeTab.value = 'ai';
-  nextTick(() => {
-    aiRef.value?.outAnswer &&
-      aiRef.value.outAnswer({
-        type: 'answer',
-        content: '我刚刚提交了一份我的翻译结果：',
-        ext: {
-          ssid: question.value.ssid,
-          translate_question_id: question.value.question_id,
-          type: 'translation',
-          from: 'en',
-          to: 'zh-CN',
-          answer: answer,
-        },
-      });
-    scrollToBottom();
-  });
+  // activeTab.value = 'ai';
+  // nextTick(() => {
+  //   aiRef.value?.outAnswer &&
+  //     aiRef.value.outAnswer({
+  //       type: 'answer',
+  //       content: '我刚刚提交了一份我的翻译结果：',
+  //       ext: {
+  //         ssid: question.value.ssid,
+  //         question_id: question.value.question_id,
+  //         type: 'translation',
+  //         from: 'en',
+  //         to: 'zh-CN',
+  //         answer: answer,
+  //       },
+  //     });
+  //   scrollToBottom();
+  // });
 };
 const scrollToBottom = () => {
   talkAreaRef.value.scrollTop = talkAreaRef.value.scrollHeight;
@@ -192,7 +201,6 @@ const scrollToBottom = () => {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(11px);
 }
-
 .nav-header {
   height: 3.4em;
   display: flex;
@@ -215,10 +223,36 @@ const scrollToBottom = () => {
 }
 .ai-area {
 }
+.tran-tips {
+  font-weight: bold;
+  font-size: 18px;
+  margin: 4px 0;
+  background: linear-gradient(to right, #4a90e2, #9013fe);
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    width: 100%;
+    height: 5px;
+    background-color: rgba(74, 144, 226, 0.6);
+    z-index: -1;
+  }
+}
+
+.color-black {
+  font-size: 16px;
+  background: #303133;
+  background-clip: text;
+}
+
 .talk-area {
   flex: 1;
   overflow-y: auto;
-  padding: 0 4px;
   // 移除固定高度
   // height: calc(100vh - 120px - 46px);
   .question-area {
@@ -227,30 +261,6 @@ const scrollToBottom = () => {
     background-color: rgba(248, 248, 248, 0.5);
     border-radius: 8px;
     text-align: left;
-    .tran-tips {
-      font-weight: bold;
-      font-size: 18px;
-      margin: 4px 0;
-      background: linear-gradient(to right, #4a90e2, #9013fe);
-      background-clip: text;
-      color: transparent;
-      display: inline-block;
-      position: relative;
-      &::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 2px;
-        width: 100%;
-        height: 5px;
-        background-color: rgba(74, 144, 226, 0.6);
-        z-index: -1;
-      }
-    }
-    .color-black {
-      background: #606266;
-      background-clip: text;
-    }
     .wait-translate {
       position: relative;
       .mask {
@@ -299,8 +309,8 @@ const scrollToBottom = () => {
   color: transparent;
 }
 .next-question-btn {
-  margin-top: 10px;
-  width: 60vw;
+  margin: 10px;
+  width: calc(100vw - 20px);
   margin: 0 auto;
 }
 
@@ -325,6 +335,21 @@ const scrollToBottom = () => {
   &--active {
     color: #1989fa;
     font-weight: 700;
+  }
+}
+.review-area {
+  margin: 10px;
+  padding: 10px;
+  text-align: left;
+  background-color: rgba(248, 248, 248, 0.8);
+  border-radius: 4px;
+  .line-text{
+    font-size: 14px;
+  }
+  .line {
+    height: 1px;
+    background: rgb(177.3, 179.4, 183.6);
+  margin: 10px 0;    
   }
 }
 </style>

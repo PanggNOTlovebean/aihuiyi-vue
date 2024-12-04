@@ -38,7 +38,7 @@ const emits = defineEmits(['sendMsg', 'activeChange']);
 const sendMsg = () => {
   const answer = inputValue.value;
   inputValue.value = '';
-  emits('sendMsg', answer);
+  answer && emits('sendMsg', answer);
 };
 const activeChange = (val) => {
   emits('activeChange', val);
@@ -48,9 +48,7 @@ const activeChange = (val) => {
 <style lang="less" scoped>
 .bottom-box {
   padding: 8px 16px 8px;
-  // margin-bottom: 20px;
   background: transparent;
-
   .tab-group {
     display: flex;
     gap: 12px;
@@ -81,7 +79,6 @@ const activeChange = (val) => {
       }
     }
   }
-
   .input-area {
     position: relative;
     background: #f5f7fa;
