@@ -1,5 +1,5 @@
 <template>
-   <!--  -->
+  <!--  -->
   <div class="bottom-box">
     <div class="tab-group" v-if="show">
       <div
@@ -21,13 +21,20 @@
       <textarea
         v-model="inputValue"
         class="message-input"
-        @blur="() => {
-        show = true}"
-        @focus="() => {show = false}"
+        @blur="
+          () => {
+            show = true;
+          }
+        "
+        @focus="
+          () => {
+            show = false;
+          }
+        "
         :placeholder="props.placeholder"
         rows="3"
       ></textarea>
-      
+
       <div class="send-btn" @click="sendMsg">
         <img src="@/assets/icon/send.svg" alt="send" />
       </div>
@@ -49,16 +56,16 @@ function getClientHeight() {
 let origin = getClientHeight();
 
 onMounted(() => {
-  window.addEventListener("resize", () => {
-  const resize = getClientHeight();
-  if (origin > resize) {
-    show.value = false;
-  } else {
-    show.value = true;
-  }
-  origin = resize;
+  window.addEventListener('resize', () => {
+    const resize = getClientHeight();
+    if (origin > resize) {
+      show.value = false;
+    } else {
+      show.value = true;
+    }
+    origin = resize;
+  });
 });
-})
 const sendMsg = () => {
   const answer = inputValue.value;
   inputValue.value = '';
