@@ -30,7 +30,6 @@
         </div>
       </div>
     </div>
-
     <!-- 底部导航栏 -->
     <div class="bottom-nav">
       <van-icon name="award" size="24" />

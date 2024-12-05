@@ -1,22 +1,6 @@
 <template>
   <!--  -->
-  <div class="bottom-box">
-    <div class="tab-group" v-if="show">
-      <div
-        :class="['tab-item', props.activeTab === 'practice' ? 'active' : '']"
-        @click="activeChange('practice')"
-      >
-        <span class="tab-icon">👨‍🎓</span>
-        训练模式
-      </div>
-      <div
-        :class="['tab-item', props.activeTab === 'ai' ? 'active' : '']"
-        @click="activeChange('ai')"
-      >
-        <span class="tab-icon">🤖</span>
-        AI指导
-      </div>
-    </div>
+  <div class="bottom-box" :style="{height: show ? '160px' : '90px'}">
     <div class="input-area">
       <textarea
         v-model="inputValue"
@@ -37,6 +21,22 @@
 
       <div class="send-btn" @click="sendMsg">
         <img src="@/assets/icon/send.svg" alt="send" />
+      </div>
+    </div>
+    <div class="tab-group" v-if="show">
+      <div
+        :class="['tab-item', props.activeTab === 'practice' ? 'active' : '']"
+        @click="activeChange('practice')"
+      >
+        <span class="tab-icon">👨‍🎓</span>
+        训练模式
+      </div>
+      <div
+        :class="['tab-item', props.activeTab === 'ai' ? 'active' : '']"
+        @click="activeChange('ai')"
+      >
+        <span class="tab-icon">🤖</span>
+        AI指导
       </div>
     </div>
   </div>
@@ -78,13 +78,13 @@ const activeChange = (val) => {
 
 <style lang="less" scoped>
 .bottom-box {
-  // todo 影响布局
-  padding: 8px 16px 8px;
+  padding: 8px 16px;
+  height: 160px;
   background: transparent;
   .tab-group {
     display: flex;
     gap: 12px;
-    margin-bottom: 12px;
+    margin-top: 12px;
 
     .tab-item {
       flex: 1;
@@ -116,17 +116,17 @@ const activeChange = (val) => {
     background: #f5f7fa;
     border-radius: 12px;
     padding: 8px 16px;
-
+    display: flex;;
     .message-input {
-      width: 100%;
+      width: calc(100% - 40px);
       min-height: 80px;
+      position: relative;
+      left: 0;
       border: none;
       background: transparent;
       outline: none;
       font-size: 14px;
       resize: none;
-      padding-right: 40px;
-
       &::placeholder {
         color: #999;
       }
