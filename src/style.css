@@ -1,9 +1,37 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+* {
+  box-sizing: border-box; /* 确保padding和border不会增加元素的宽度 */
+}
+#app {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: Microsoft YaHei, Tahoma, Verdana, STHeiTi, simsun, sans-serif;
   font-size: 14;
   text-align: center;
   color: #303133;
   background-color: #f7f8fa;
+}
+
+body {
+  min-height: 100vh;
+  background: url('@/assets/image/background.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* 为需要虚化效果的路由页面创建一个通用类 */
+.blur-background {
+  position: relative;
+  backdrop-filter: blur(11px);
+  background-color: rgba(255, 255, 255, 0.1);
+  height: 100vh;
 }
 p {
   margin: 10px 0;

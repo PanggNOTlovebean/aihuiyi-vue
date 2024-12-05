@@ -1,29 +1,8 @@
 <template>
   <!--  -->
-  <div class="bottom-box" :style="{height: show ? '160px' : '90px'}">
-    <div class="input-area">
-      <textarea
-        v-model="inputValue"
-        class="message-input"
-        @blur="
-          () => {
-            show = true;
-          }
-        "
-        @focus="
-          () => {
-            show = false;
-          }
-        "
-        :placeholder="props.placeholder"
-        rows="3"
-      ></textarea>
-
-      <div class="send-btn" @click="sendMsg">
-        <img src="@/assets/icon/send.svg" alt="send" />
-      </div>
-    </div>
-    <div class="tab-group" v-if="show">
+  <!-- :style="{height: showKeyBoard ? '160px' : '90px'}" -->
+  <div class="bottom-box" >
+    <div class="tab-group">
       <div
         :class="['tab-item', props.activeTab === 'practice' ? 'active' : '']"
         @click="activeChange('practice')"
@@ -39,29 +18,55 @@
         AI指导
       </div>
     </div>
+    <div class="input-area">
+      <textarea
+        v-model="inputValue"
+        class="message-input"
+        @blur="onBlur"
+        @focus="onFocus"
+        :placeholder="props.placeholder"
+        rows="3"
+      ></textarea>
+
+      <div class="send-btn" @click="sendMsg">
+        <img src="@/assets/icon/send.svg" alt="send" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits, onMounted } from 'vue';
+import { ref, defineProps, defineEmits, onMounted, nextTick } from 'vue';
 const inputValue = ref('');
-const show = ref(true);
+const showKeyBoard = ref(false);
 const props = defineProps(['activeTab', 'placeholder']);
-const emits = defineEmits(['sendMsg', 'activeChange']);
+const emits = defineEmits(['sendMsg', 'activeChange', 'scrollToTop']);
 
 function getClientHeight() {
   return document.documentElement.clientHeight || document.body.clientHeight;
 }
 
+const isIOS = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
 let origin = getClientHeight();
-
+const onBlur = () => {
+  showKeyBoard.value = false
+  // isIOS && (document.querySelector('.talk-area').style.flexDirection = `column`);
+}
+const onFocus = () => {
+  showKeyBoard.value = true
+  setTimeout(() => {
+    // isIOS && (document.querySelector('.talk-area').style.flexDirection = `column-reverse`);
+  }, 0);
+  // emits('scrollToTop');
+}
+// 初始设置
 onMounted(() => {
   window.addEventListener('resize', () => {
     const resize = getClientHeight();
     if (origin > resize) {
-      show.value = false;
+      showKeyBoard.value = false;
     } else {
-      show.value = true;
+      showKeyBoard.value = true;
     }
     origin = resize;
   });
@@ -79,13 +84,14 @@ const activeChange = (val) => {
 <style lang="less" scoped>
 .bottom-box {
   padding: 8px 16px;
-  height: 160px;
+  // height: 170px;
+  // position: absolute;
+  // bottom: 0;
   background: transparent;
   .tab-group {
     display: flex;
     gap: 12px;
-    margin-top: 12px;
-
+    margin-bottom: 12px;
     .tab-item {
       flex: 1;
       padding: 8px 16px;

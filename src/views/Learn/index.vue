@@ -80,12 +80,11 @@
         >
       </div>
     </div>
-    <div class="ai-area" v-show="activeTab === 'ai'">
-      <AIAssistant ref="aiRef" :question="question" />
-    </div>
+    <AIAssistant ref="aiRef"  v-show="activeTab === 'ai'" :question="question" />
     <BottomInput
       :activeTab="activeTab"
       @sendMsg="sendMsg"
+      @scrollToTop="scrollToTop"
       :placeholder="activeTab === 'ai' ? '请输入你的疑问' : '请输入你的答案'"
       @activeChange="activeChange"
     ></BottomInput>
@@ -220,17 +219,17 @@ const submit = (answer: string) => {
   //         answer: answer,
   //       },
   //     });
-  //   scrollToBottom();
   // });
 };
-const scrollToBottom = () => {
-  talkAreaRef.value.scrollTop = talkAreaRef.value.scrollHeight;
+const scrollToTop = () => {
+  talkAreaRef.value.scrollTop = 0;
 };
 </script>
 
 <style lang="less" scoped>
 .learn-page {
   height: 100vh;
+  position: relative;
   display: flex;
   overflow: hidden;
   flex-direction: column;
@@ -292,9 +291,14 @@ const scrollToBottom = () => {
 
 .talk-area {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  // flex-direction: column-reverse;
   overflow-y: auto;
+  // position: absolute;
+  // bottom: 170px;
   // 移除固定高度
-  // height: calc(100vh - 120px - 46px);
+  height: calc(100% - 170px - 3.4em);
   .question-area {
     margin: 10px;
     padding: 10px;
