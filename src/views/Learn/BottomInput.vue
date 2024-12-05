@@ -1,6 +1,7 @@
 <template>
+   <!--  -->
   <div class="bottom-box">
-    <div class="tab-group">
+    <div class="tab-group" v-if="show">
       <div
         :class="['tab-item', props.activeTab === 'practice' ? 'active' : '']"
         @click="activeChange('practice')"
@@ -20,9 +21,13 @@
       <textarea
         v-model="inputValue"
         class="message-input"
+        @blur="() => {
+        show = true}"
+        @focus="() => {show = false}"
         :placeholder="props.placeholder"
         rows="3"
       ></textarea>
+      
       <div class="send-btn" @click="sendMsg">
         <img src="@/assets/icon/send.svg" alt="send" />
       </div>
@@ -31,10 +36,29 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits, onMounted } from 'vue';
 const inputValue = ref('');
+const show = ref(true);
 const props = defineProps(['activeTab', 'placeholder']);
 const emits = defineEmits(['sendMsg', 'activeChange']);
+
+function getClientHeight() {
+  return document.documentElement.clientHeight || document.body.clientHeight;
+}
+
+let origin = getClientHeight();
+
+onMounted(() => {
+  window.addEventListener("resize", () => {
+  const resize = getClientHeight();
+  if (origin > resize) {
+    show.value = false;
+  } else {
+    show.value = true;
+  }
+  origin = resize;
+});
+})
 const sendMsg = () => {
   const answer = inputValue.value;
   inputValue.value = '';
@@ -47,6 +71,7 @@ const activeChange = (val) => {
 
 <style lang="less" scoped>
 .bottom-box {
+  // todo 影响布局
   padding: 8px 16px 8px;
   background: transparent;
   .tab-group {
