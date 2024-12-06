@@ -30,6 +30,7 @@
         </div>
       </div>
     </div>
+
     <!-- 底部导航栏 -->
     <div class="bottom-nav">
       <van-icon name="award" size="24" />
@@ -76,13 +77,13 @@ const goUser = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 350px;
+  min-height: 40px;
   padding: 20px;
 }
 
 .quote-wrapper {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 150px;
 }
 
 .quote-text {
@@ -126,6 +127,7 @@ const goUser = () => {
   align-items: flex-start;
   color: white;
   font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
 }
 
 .number {
@@ -157,9 +159,10 @@ const goUser = () => {
   gap: 8px;
 
   span:first-child {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
     color: #333;
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 23px;
+    font-weight: 500;
   }
 }
 </style>
