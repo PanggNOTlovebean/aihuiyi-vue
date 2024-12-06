@@ -1,5 +1,5 @@
 <template>
-  <div class="learn-page">
+  <div class="learn-page" @touchstart="handlePageTouch">
     <div class="nav-header">
       <div class="left">
         <van-icon name="arrow-left" @click="onClickLeft" />
@@ -81,19 +81,20 @@
       </div>
     </div>
     <AIAssistant ref="aiRef"  v-show="activeTab === 'ai'" :question="question" />
-    <BottomInput
-      :activeTab="activeTab"
-      @sendMsg="sendMsg"
-      @scrollToTop="scrollToTop"
-      :placeholder="activeTab === 'ai' ? '请输入你的疑问' : '请输入你的答案'"
-      @activeChange="activeChange"
-    ></BottomInput>
   </div>
+  <BottomInput
+    :activeTab="activeTab"
+    @sendMsg="sendMsg"
+    @scrollToTop="scrollToTop"
+    :placeholder="activeTab === 'ai' ? '请输入你的疑问' : '请输入你的答案'"
+    @activeChange="activeChange"
+  ></BottomInput>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { isIOS } from '@/utils/common.ts';
 import AIAssistant from './AIAssistant.vue';
 import BottomInput from './BottomInput.vue';
 import markdownit from 'markdown-it';
@@ -125,7 +126,7 @@ const activeChange = (tab: string) => {
 };
 const getQuestion = () => {
   axios
-    .post('/startSession', {
+    .post('/api/startSession', {
       user_id: 'wx_o1234567',
       ssid: '',
     })
@@ -204,31 +205,28 @@ const submit = (answer: string) => {
     getjiexiResult()
     step.value = 3;
   }
-  // activeTab.value = 'ai';
-  // nextTick(() => {
-  //   aiRef.value?.outAnswer &&
-  //     aiRef.value.outAnswer({
-  //       type: 'answer',
-  //       content: '我刚刚提交了一份我的翻译结果：',
-  //       ext: {
-  //         ssid: question.value.ssid,
-  //         question_id: question.value.question_id,
-  //         type: 'translation',
-  //         from: 'en',
-  //         to: 'zh-CN',
-  //         answer: answer,
-  //       },
-  //     });
-  // });
 };
 const scrollToTop = () => {
   talkAreaRef.value.scrollTop = 0;
+};
+
+const handlePageTouch = (e: MouseEvent) => {
+  if (!isIOS) return
+  // 检查点击的目标是否是输入框或其父元素
+  const target = e.target as HTMLElement;
+  if (!target.closest('.bottom-box')) {
+    // 获取所有输入框元素并让它们失去焦点
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => input.blur());
+  }
 };
 </script>
 
 <style lang="less" scoped>
 .learn-page {
   height: 100vh;
+  // height: calc(var(--vh, 1vh) * 100);
+  padding-bottom: 170px;
   position: relative;
   display: flex;
   overflow: hidden;

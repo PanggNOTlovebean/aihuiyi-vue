@@ -1,7 +1,6 @@
 <template>
-  <!--  -->
-  <!-- :style="{height: showKeyBoard ? '160px' : '90px'}" -->
   <div class="bottom-box" >
+    
     <div class="tab-group">
       <div
         :class="['tab-item', props.activeTab === 'practice' ? 'active' : '']"
@@ -37,6 +36,7 @@
 
 <script lang="ts" setup>
 import { ref, defineProps, defineEmits, onMounted, nextTick } from 'vue';
+import { isIOS } from '@/utils/common.ts';
 const inputValue = ref('');
 const showKeyBoard = ref(false);
 const props = defineProps(['activeTab', 'placeholder']);
@@ -46,18 +46,18 @@ function getClientHeight() {
   return document.documentElement.clientHeight || document.body.clientHeight;
 }
 
-const isIOS = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
 let origin = getClientHeight();
 const onBlur = () => {
   showKeyBoard.value = false
   isIOS && (document.querySelector('.talk-area').style.flexDirection = `column`);
+  window.scrollTo(0, 0);
 }
 const onFocus = () => {
   showKeyBoard.value = true
   setTimeout(() => {
     isIOS && (document.querySelector('.talk-area').style.flexDirection = `column-reverse`);
   }, 0);
-  // emits('scrollToTop');
+
 }
 // 初始设置
 onMounted(() => {
@@ -85,8 +85,10 @@ const activeChange = (val) => {
 .bottom-box {
   padding: 8px 16px;
   height: 170px;
-  // position: absolute;
-  // bottom: 0;
+  position: fixed;
+  bottom: 0;
+  left:0;
+  right:0;
   background: transparent;
   .tab-group {
     display: flex;
