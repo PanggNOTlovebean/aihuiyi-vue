@@ -50,12 +50,12 @@ const isIOS = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
 let origin = getClientHeight();
 const onBlur = () => {
   showKeyBoard.value = false
-  // isIOS && (document.querySelector('.talk-area').style.flexDirection = `column`);
+  isIOS && (document.querySelector('.talk-area').style.flexDirection = `column`);
 }
 const onFocus = () => {
   showKeyBoard.value = true
   setTimeout(() => {
-    // isIOS && (document.querySelector('.talk-area').style.flexDirection = `column-reverse`);
+    isIOS && (document.querySelector('.talk-area').style.flexDirection = `column-reverse`);
   }, 0);
   // emits('scrollToTop');
 }
@@ -84,7 +84,7 @@ const activeChange = (val) => {
 <style lang="less" scoped>
 .bottom-box {
   padding: 8px 16px;
-  // height: 170px;
+  height: 170px;
   // position: absolute;
   // bottom: 0;
   background: transparent;
