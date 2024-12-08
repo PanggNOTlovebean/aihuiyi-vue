@@ -20,12 +20,14 @@ export default defineConfig({
     port: 5174, // 你可以选择任何端口
     proxy: {
       '/api': {
-        target: 'http://47.95.36.122:8765',
+        // target: 'http://47.95.36.122:8765',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
       '/startSession': {
-        target: 'http://47.95.36.122:8765',
+        // target: 'http://47.95.36.122:8765',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },

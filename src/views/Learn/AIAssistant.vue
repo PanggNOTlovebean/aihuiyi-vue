@@ -3,7 +3,7 @@
     <div v-for="(item, index) in talkList" :key="index">
       <div v-if="item.type === 'AI'" class="talk-item talk-left">
         <div class="chat-bubble">
-          {{ item.content }}
+          <div class="standard-chinese-text" v-html="item.content"></div>
         </div>
       </div>
       <div v-if="item.type === 'MINE'" class="talk-item talk-right">
@@ -139,6 +139,16 @@ defineExpose({
   }
   .bottoms {
     padding: 10px;
+  }
+}
+.talk-item {
+  &.talk-left {
+    .chat-bubble {
+      :deep(.standard-chinese-text) {
+        font-size: 15px;
+        line-height: 1.5;
+      }
+    }
   }
 }
 </style>
