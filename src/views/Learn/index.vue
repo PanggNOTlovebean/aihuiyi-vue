@@ -145,7 +145,7 @@ const getjiexiResult = () => {
   aiLoading.value = true;
   question.value.jiexi = 'AI正在解析中...';
   axios
-    .post('/userMessage', {
+    .post('/api/userMessage', {
       user_id: question.value.user_id,
       type: 'answer',
       ssid: question.value.ssid,
